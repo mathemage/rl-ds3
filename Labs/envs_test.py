@@ -1,11 +1,11 @@
 import gym
 env = gym.make('CartPole-v0')
 
-#n_a = env.action_space.n
-#n_s = env.observation_space.n
-
-#print("Nb_Actions: {}".format(n_a))
-#print("Nb_States: {}".format(n_s))
+# n_a = env.action_space.n
+# n_s = env.observation_space.n
+#
+# print("Nb_Actions: {}".format(n_a))
+# print("Nb_States: {}".format(n_s))
 
 for i_episode in range(20):
     observation = env.reset()
