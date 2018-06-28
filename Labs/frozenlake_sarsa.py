@@ -8,6 +8,7 @@ GAMMA = 0.99
 
 env = gym.make('FrozenLake-v0')
 env.seed(SEED)
+np.random.seed(SEED)
 n_a = env.action_space.n
 n_s = env.observation_space.n
 
@@ -17,18 +18,19 @@ def init_q():
 	return np.random.rand(n_s, n_a)
 
 
-def run_episodes(episodes=20):
-	global observation
-	for i_episode in range(episodes):
-		observation = env.reset()
-		for t in range(100):
-			env.render()
-			print(observation)
-			action = env.action_space.sample()
-			observation, reward, done, info = env.step(action)
+def measure_q(q, environment, episodes=100):
+	successes = 0
+	for ep in range(episodes):
+		print("Episode {}:".format(ep))
+		s = environment.reset()
+		while True:
+			# env.render()
+			a = action_choice(q, s, epsilon=1)
+			s, r, done, _ = environment.step(a)
 			if done:
-				print("Episode finished after {} timesteps".format(t + 1))
+				successes += r == 1
 				break
+	return successes
 
 
 def state_choice():
@@ -38,8 +40,8 @@ def state_choice():
 def action_choice(q, s, epsilon=.5):
 	# TODO epsilon-greedy
 	a = np.argmax(q[s][:])
-	print(q[s][:])
-	print("a: {}".format(a))
+	# print(q[s][:])
+	# print("a: {}".format(a))
 	return a
 
 
@@ -70,7 +72,5 @@ def sarsa(environment, alpha=0.1):
 
 if __name__ == '__main__':
 	q_table = sarsa(environment=env)
-	# run_episodes()
-	print(n_a)
-	print(n_s)
-	# print(q_table)
+	accuracy = measure_q(environment=env, q=q_table)
+	print("accuracy: {}".format(accuracy))
