@@ -2,8 +2,8 @@ import gym.spaces
 import numpy as np
 
 SEED = 1337
-EPISODES = 3
-# EPISODES = 3000
+# TRAINING_EPISODES = 3
+TRAINING_EPISODES = 3000
 GAMMA = 0.99
 
 env = gym.make('FrozenLake-v0')
@@ -50,7 +50,7 @@ def sarsa(environment, alpha=0.1):
 	:return: the converged Q-table
 	"""
 	q = init_q()
-	for ep in range(EPISODES):
+	for ep in range(TRAINING_EPISODES):
 		print("Episode {}:".format(ep))
 		s = environment.reset()
 		a = action_choice(q, s)
@@ -62,11 +62,12 @@ def sarsa(environment, alpha=0.1):
 			q[s, a] += alpha * delta
 			s, a = s_new, a_new
 			print("delta: {}".format(delta))
-			print("Q-table:\n{}".format(q))
 	return q
 
 
 if __name__ == '__main__':
+	print("Training...")
 	q_table = sarsa(environment=env)
+	print("Measuring...")
 	accuracy = measure_q(environment=env, q=q_table)
 	print("accuracy: {}".format(accuracy))
