@@ -2,11 +2,11 @@ import gym.spaces
 import numpy as np
 
 SEED = 1337
-# TRAINING_EPISODES = 3000
 TRAINING_EPISODES = 10000
+TESTING_EPISODES = 10000
 ALPHA = 0.1
 GAMMA = 0.99
-EPSILON = 0.7
+EPSILON = 0.3
 
 env = gym.make('FrozenLake-v0')
 env.seed(SEED)
@@ -52,7 +52,7 @@ def sarsa(environment, alpha=ALPHA):
 	return q
 
 
-def measure_q(q, environment, episodes=100):
+def measure_q(q, environment, episodes=TESTING_EPISODES):
 	successes = 0
 	for ep in range(episodes):
 		# print("Episode {}:".format(ep))
