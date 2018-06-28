@@ -2,9 +2,11 @@ import gym.spaces
 import numpy as np
 
 SEED = 1337
-# TRAINING_EPISODES = 3
-TRAINING_EPISODES = 3000
+# TRAINING_EPISODES = 3000
+TRAINING_EPISODES = 10000
+ALPHA = 0.1
 GAMMA = 0.99
+EPSILON = 0.7
 
 env = gym.make('FrozenLake-v0')
 env.seed(SEED)
@@ -21,7 +23,7 @@ def init_q():
 def measure_q(q, environment, episodes=100):
 	successes = 0
 	for ep in range(episodes):
-		print("Episode {}:".format(ep))
+		# print("Episode {}:".format(ep))
 		s = environment.reset()
 		while True:
 			# env.render()
@@ -33,15 +35,15 @@ def measure_q(q, environment, episodes=100):
 	return successes
 
 
-def action_choice(q, s, epsilon=.5):
-	if epsilon is None or np.random.rand() > epsilon:
+def action_choice(q, s, epsilon=EPSILON):
+	if epsilon is None or np.random.rand() > epsilon:  # exploitation
 		a = np.argmax(q[s][:])
-	else:
+	else:  # exploration
 		a = np.random.randint(0, n_a)
 	return a
 
 
-def sarsa(environment, alpha=0.1):
+def sarsa(environment, alpha=ALPHA):
 	"""
 	https://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html
 
