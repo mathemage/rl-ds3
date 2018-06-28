@@ -1,4 +1,5 @@
 import gym.spaces
+import numpy as np
 
 SEED = 1337
 STEPS = 5
@@ -8,9 +9,7 @@ env.seed(SEED)
 observation = env.reset()
 n_a = env.action_space.n
 n_s = env.observation_space.n
-
-print(n_a)
-print(n_s)
+q_table = np.zeros((n_s, n_a))
 
 
 def run_episodes(episodes=20):
@@ -27,4 +26,9 @@ def run_episodes(episodes=20):
 				break
 
 
-run_episodes()
+if __name__ == '__main__':
+	run_episodes()
+
+	print(n_a)
+	print(n_s)
+	print(q_table)
