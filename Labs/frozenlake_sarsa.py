@@ -16,23 +16,8 @@ n_s = env.observation_space.n
 
 
 def init_q():
-	# return np.zeros((n_s, n_a))
-	return np.random.rand(n_s, n_a)
-
-
-def measure_q(q, environment, episodes=100):
-	successes = 0
-	for ep in range(episodes):
-		# print("Episode {}:".format(ep))
-		s = environment.reset()
-		while True:
-			# env.render()
-			a = action_choice(q, s, epsilon=None)
-			s, r, done, _ = environment.step(a)
-			if done:
-				successes += r == 1
-				break
-	return successes
+	return np.zeros((n_s, n_a))
+	# return np.random.rand(n_s, n_a)
 
 
 def action_choice(q, s, epsilon=EPSILON):
@@ -65,6 +50,21 @@ def sarsa(environment, alpha=ALPHA):
 			s, a = s_new, a_new
 			print("delta: {}".format(delta))
 	return q
+
+
+def measure_q(q, environment, episodes=100):
+	successes = 0
+	for ep in range(episodes):
+		# print("Episode {}:".format(ep))
+		s = environment.reset()
+		while True:
+			# env.render()
+			a = action_choice(q, s, epsilon=None)
+			s, r, done, _ = environment.step(a)
+			if done:
+				successes += r == 1
+				break
+	return successes
 
 
 if __name__ == '__main__':
