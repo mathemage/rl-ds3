@@ -33,10 +33,6 @@ def measure_q(q, environment, episodes=100):
 	return successes
 
 
-def state_choice():
-	return 42
-
-
 def action_choice(q, s, epsilon=.5):
 	# TODO epsilon-greedy
 	a = np.argmax(q[s][:])
