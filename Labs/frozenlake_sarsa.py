@@ -64,7 +64,7 @@ def measure_q(q, environment, episodes=TESTING_EPISODES):
 			if done:
 				successes += r == 1
 				break
-	return successes
+	return successes / episodes
 
 
 if __name__ == '__main__':
