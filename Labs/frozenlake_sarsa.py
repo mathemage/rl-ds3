@@ -12,13 +12,19 @@ n_s = env.observation_space.n
 print(n_a)
 print(n_s)
 
-for i_episode in range(20):
-	observation = env.reset()
-	for t in range(100):
-		env.render()
-		print(observation)
-		action = env.action_space.sample()
-		observation, reward, done, info = env.step(action)
-		if done:
-			print("Episode finished after {} timesteps".format(t+1))
-			break
+
+def run_episodes(episodes=20):
+	global observation
+	for i_episode in range(episodes):
+		observation = env.reset()
+		for t in range(100):
+			env.render()
+			print(observation)
+			action = env.action_space.sample()
+			observation, reward, done, info = env.step(action)
+			if done:
+				print("Episode finished after {} timesteps".format(t + 1))
+				break
+
+
+run_episodes()
