@@ -25,7 +25,7 @@ def measure_q(q, environment, episodes=100):
 		s = environment.reset()
 		while True:
 			# env.render()
-			a = action_choice(q, s, epsilon=1)
+			a = action_choice(q, s, epsilon=None)
 			s, r, done, _ = environment.step(a)
 			if done:
 				successes += r == 1
@@ -34,10 +34,10 @@ def measure_q(q, environment, episodes=100):
 
 
 def action_choice(q, s, epsilon=.5):
-	# TODO epsilon-greedy
-	a = np.argmax(q[s][:])
-	# print(q[s][:])
-	# print("a: {}".format(a))
+	if epsilon is None or np.random.rand() > epsilon:
+		a = np.argmax(q[s][:])
+	else:
+		a = np.random.randint(0, n_a)
 	return a
 
 
