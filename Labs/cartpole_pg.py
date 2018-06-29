@@ -101,7 +101,7 @@ def main():
 	plt.show()
 
 	# Test final policy
-	success, num_success, average_return = test_policy(env, theta, num_episodes=10, render=True)
+	success, num_success, average_return = test_policy(env, theta, render=True)
 	print("success == {}".format(success))
 	print("num_success == {}".format(num_success))
 	print("average_return == {}".format(average_return))
