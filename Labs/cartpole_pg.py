@@ -14,10 +14,13 @@ VERBOSE = True
 DEFAULT_THETA = [.5, .5, .5, .5]
 SEED = 1337
 np.random.seed(SEED)
+PG_INIT = np.zeros(4)
+
 
 # Compute policy parameterisation
 def sigmoid(x):
-	return 1 / (1 + np.exp(-x))
+	# print(x)
+	return 1.0 / (1.0 + np.exp(-x))
 
 
 # Return policy
@@ -71,14 +74,32 @@ def test_policy(env, theta, score=SCORE, num_episodes=TEST_TIME, max_episode_len
 
 
 # Returns Policy Gradient for a given episode
-def compute_pg(episode_states, episode_actions, episode_rewards, theta):
-	pass
+def compute_pg(episode_actions, episode_rewards, episode_states, theta):
+	pg = PG_INIT
+	for t in range(len(episode_rewards)):
+		R_t = sum(episode_rewards[t:])
+		sigmoid_value = get_policy(episode_states[t], theta)
+		grad_log_t = sigmoid_value * episode_states[t] * (-1 if episode_actions[t] == RIGHT else 1)
+		pg += R_t * grad_log_t
+	print(" theta == {}".format(theta))
+	print(" pg == {}".format(pg))
+	return pg
 
 
 # Train until average return is larger than SCORE
 def train(env, theta_init=DEFAULT_THETA, max_episode_length=EPISODE_DURATION, alpha_init=ALPHA_INIT):
-	theta, i, average_returns = theta_init, 0, []
-	return theta, i, average_returns
+	theta, alpha, n, average_returns = theta_init, alpha_init, 0, []
+	while True:
+		episode_states, episode_actions, episode_rewards = rollout(env, theta, max_episode_length, render=False)
+		average_return = sum(episode_rewards)
+		average_returns.append(average_return)
+		print("Training episode {}:".format(n))
+		print(" average reward == {}".format(average_return))
+		if average_return > SCORE:
+			return theta, n, average_returns
+		pg = compute_pg(episode_actions, episode_rewards, episode_states, theta)
+		theta += alpha * pg
+		n += 1
 
 
 def main():
@@ -86,8 +107,8 @@ def main():
 	env.seed(SEED)
 	dim = env.observation_space.shape[0]
 	# Init parameters to random
-	# theta_init = np.random.randn(dim)
-	theta_init = [.5, .5, .5, .5]
+	theta_init = np.random.randn(dim)
+	# theta_init = [.5, .5, .5, .5]
 
 	# Train agent
 	theta, i, average_returns = train(env, theta_init)
