@@ -20,7 +20,7 @@ def sigmoid(x):
 
 # Return policy
 def get_policy(s, theta):
-	pass
+	return sigmoid(np.dot(s, theta))
 
 
 # Draw an action according to current policy
