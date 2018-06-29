@@ -15,7 +15,7 @@ VERBOSE = True
 
 # Compute policy parameterisation
 def sigmoid(x):
-	pass
+	return 1 / (1 + np.exp(-x))
 
 
 # Return policy
